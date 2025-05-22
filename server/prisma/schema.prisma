@@ -1,0 +1,32 @@
+// Prisma schema
+// datasource
+ datasource db {
+   provider = "sqlite"
+   url      = "file:./dev.db"
+ }
+
+ generator client {
+   provider = "prisma-client-js"
+ }
+
+model ParkingLot {
+  id     Int    @id @default(autoincrement())
+  name   String
+  spots  Spot[]
+}
+
+model Spot {
+  id     Int    @id @default(autoincrement())
+  number Int
+  lot    ParkingLot @relation(fields: [lotId], references: [id])
+  lotId  Int
+  reservations Reservation[]
+}
+
+model Reservation {
+  id        Int      @id @default(autoincrement())
+  startTime DateTime
+  endTime   DateTime
+  spot      Spot     @relation(fields: [spotId], references: [id])
+  spotId    Int
+}
